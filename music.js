@@ -8,18 +8,24 @@ let csvData = [];
 let minDataValue;
 let maxDataValue;
 
-// Start button event
-document.getElementById('startButton').addEventListener('click', () => {
-  if (!synth) {
-    // Initialize audio components within the user gesture event
-    synth = new Tone.Synth().toDestination();
-    reverb = new Tone.Reverb({
-      decay: 1,
-      wet: 1,
-    }).connect(synth);
+document.addEventListener('DOMContentLoaded', function() {
+  // Your JavaScript code here
+  const startButton = document.getElementById('startButton');
+  // Add event listener to the button
+  if (startButton) {
+    startButton.addEventListener('click', () => {
+      if (!synth) {
+        // Initialize audio components within the user gesture event
+        synth = new Tone.Synth().toDestination();
+        reverb = new Tone.Reverb({
+          decay: 1,
+          wet: 1,
+        }).connect(synth);
 
-    // Start playing when the user clicks the "Start Music" button
-    startMusic();
+        // Start playing when the user clicks the "Start Music" button
+        startMusic();
+      }
+    });
   }
 });
 
