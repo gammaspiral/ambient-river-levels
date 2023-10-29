@@ -47,15 +47,16 @@ function startMusic(audioContext) {
     const dataValue = parseFloat(csvData[index]['Height (m)']);
     const pitch = mapDataToPitch(dataValue);
     const volume = 0.5;
+    const releaseTime = 5.5; // Adjust the release time as needed
 
     // Calculate the duration of the previous note (in milliseconds)
-    const previousNoteDuration = synth.getEnvelopeAtTime(audioContext.currentTime).release;
+    const previousNoteDuration = releaseTime * 1000;
 
     // Calculate the delay for the next note (in milliseconds)
-    const delay = previousNoteDuration * 1000;
+    const delay = previousNoteDuration;
 
-    // Schedule the next note with a delay
-    synth.triggerAttackRelease(pitch, '1n', undefined, volume, audioContext.currentTime + delay / 1000);
+    // Schedule the next note with a delay and specified release time
+    synth.triggerAttackRelease(pitch, '1n', audioContext.currentTime + delay / 1000, releaseTime, volume);
 
     // Move to the next data point
     index = (index + 1) % csvData.length;
