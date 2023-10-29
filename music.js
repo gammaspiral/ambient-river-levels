@@ -40,31 +40,26 @@ function mapDataToPitch(dataValue) {
 
 function startMusic(audioContext) {
   let index = 0;
-  const interval = 2000; // Simulated data update interval (2 seconds);
+  const interval = 2000; // Simulated data update interval (2 seconds)
   let lastScheduledTime = audioContext.currentTime;
 
-    // Create a FeedbackDelay instance with the desired settings
-  const delay = new Tone.FeedbackDelay({
-    delayTime: 0.2, // Adjust the delay time (in seconds) as needed
-    feedback: 0.7, // Adjust the feedback amount
-  });
-   // Connect the delay effect in the audio chain
-  synth.connect(delay);
   function playDroningTexture() {
     // Use the data to control synth parameters (e.g., pitch and volume)
     const dataValue = parseFloat(csvData[index]['Height (m)']);
     const pitch = mapDataToPitch(dataValue);
     const volume = 0.5;
-    const releaseTime = 1.5; // Adjust the release time as needed
+    const releaseTime = 0.5; // Adjust the release time as needed
 
-    // Calculate the duration of the previous note (in milliseconds)
-    const previousNoteDuration = releaseTime * 1000;
-
-    // Calculate the delay for the next note (in milliseconds)
-    const delay = previousNoteDuration;
+    // Calculate the duration of the previous note (in seconds)
+    const previousNoteDuration = releaseTime;
 
     // Calculate the time for scheduling the next note
-    const nextScheduledTime = lastScheduledTime + (interval / 1000);
+    const nextScheduledTime = lastScheduledTime + previousNoteDuration;
+
+    // Create a synth instance if it doesn't exist
+    if (!synth) {
+      synth = new Tone.Synth().toDestination();
+    }
 
     // Schedule the next note with the specified release time
     synth.triggerAttackRelease(pitch, '1n', nextScheduledTime, releaseTime, volume);
