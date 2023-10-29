@@ -48,7 +48,7 @@ function startMusic() {
     const dataValue = parseFloat(csvData[index]['Height (m)']);
     const pitch = mapDataToPitch(dataValue);
     //const volume = dataValue;
-    const volume = 0.5;
+    const volume = 0.4;
     // Play a note
     synth.triggerAttackRelease(pitch, '1n', 2.0,4.0, volume);
 
