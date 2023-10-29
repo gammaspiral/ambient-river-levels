@@ -41,11 +41,20 @@ crossorigin="">
     const csvURL = "https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv";
 
     // Create audio components
-    const synth = new Tone.Synth().toDestination();
-    const reverb = new Tone.Reverb({
-      decay: 5,
-      wet: 0.5,
-    }).connect(synth);
+    let synth;
+    let reverb;
+
+    // Wait for a user gesture (e.g., button click) to create the AudioContext
+    document.getElementById('startButton').addEventListener('click', () => {
+      // Create an AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Create audio components within the user gesture event
+      synth = new Tone.Synth().toDestination();
+      reverb = new Tone.Reverb({
+        decay: 5,
+        wet: 0.5,
+      }).connect(synth);
 
     let csvData = [];
     let minDataValue;
