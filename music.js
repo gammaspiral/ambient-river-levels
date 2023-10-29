@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Initialize audio components within the user gesture event
       synth = new Tone.Synth().toDestination();
       reverb = new Tone.Reverb({
-        decay: 1,
+        decay: 60,
         wet: 1,
       });
 
