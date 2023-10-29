@@ -45,7 +45,7 @@ crossorigin="">
     // Data
     const csvURL = "https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv";
 
-   // Initialize audio components
+ // Initialize audio components
     let synth;
     let reverb;
     let playing = false; // Indicates whether music is playing
@@ -57,7 +57,7 @@ crossorigin="">
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
         // Initialize audio components within the user gesture event
-        synth = new Tone.Synth().toDestination();
+        synth = new Tone.Synth().connect(audioContext.destination);
         reverb = new Tone.Reverb({
           decay: 1,
           wet: 1,
