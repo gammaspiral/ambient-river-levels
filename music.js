@@ -41,7 +41,7 @@ function mapDataToPitch(dataValue) {
 // Start playing music
 function startMusic() {
   let index = 0;
-  const interval = 2000; // Simulated data update interval (2 seconds)
+  const interval = 20000; // Simulated data update interval (2 seconds)
 
   function playNextNote() {
     // Use the data to control synth parameters (e.g., pitch and volume)
