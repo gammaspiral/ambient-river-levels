@@ -1,4 +1,4 @@
-// music.js
+/ music.js
 
 // Define the CSV data URL
 const csvURL = "https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv";
@@ -38,6 +38,11 @@ function mapDataToPitch(dataValue) {
   return Math.round(minPitch + normalizedValue * pitchRange);
 }
 
+// Start playing music
+function startMusic() {
+  let index = 0;
+  const interval = 2000; // Simulated data update interval (2 seconds)
+
   function playNextNote() {
     // Use the data to control synth parameters (e.g., pitch and volume)
     const dataValue = parseFloat(csvData[index]['Height (m)']);
@@ -45,7 +50,7 @@ function mapDataToPitch(dataValue) {
     //const volume = dataValue;
     const volume = 0.5;
     // Play a note
-    synth.triggerAttackRelease(pitch, '1n', 2.0, 5.0, volume);
+    synth.triggerAttackRelease(pitch, '1n', 2.0,4.0, volume);
 
     // Move to the next data point
     index = (index + 1) % csvData.length;
@@ -57,7 +62,6 @@ function mapDataToPitch(dataValue) {
   // Start playing
   playNextNote();
 }
-
 
 // Fetch CSV data from the URL
 fetch(csvURL)
