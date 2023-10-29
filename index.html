@@ -42,9 +42,6 @@ crossorigin="">
 
 <script src="https://cdn.jsdelivr.net/npm/tone@14"></script>
 <script>
-    // Data
-    const csvURL = "https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv";
-
  // Initialize audio components
     let synth;
     let reverb;
@@ -109,7 +106,7 @@ crossorigin="">
     let maxDataValue;
 
     // Fetch CSV data from the URL
-    fetch("data.csv")
+    fetch("https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv")
       .then((response) => response.text())
       .then((data) => {
         // Parse the CSV data into an array of objects
