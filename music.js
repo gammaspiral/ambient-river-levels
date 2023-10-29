@@ -80,7 +80,7 @@ function startMusic(audioContext) {
   }
 
   // Start playing the evolving drones
-  playDroningTexture();
+  playDroningTexture(synth);
 }
 
 
