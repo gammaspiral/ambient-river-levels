@@ -17,7 +17,7 @@ integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
 crossorigin=""></script>
 </head>
 <body>
-  <div class="container-md">
+  <div class="container">
     <div class="row">
       <div class="col">
         <h1 class="mt-5">Ambient River Levels</h1>
@@ -29,20 +29,29 @@ crossorigin=""></script>
         <button id="startButton" class="btn btn-primary mt-3">Start</button>
         <button id="stopButton" class="btn btn-danger mt-3">Stop</button>
       <p></p>
-      <div id="map" class="container-md" style="width: 600px; height: 400px;"></div>
+      <div id="map" class="container" style="width: 600px; height: 400px;"></div>
       </div>
     </div>
   </div>
 <script>
-const map = L.map('map').setView([51.478027, -0.193165], 13);
+  // Initialize the map
+  var map = L.map('map').setView([51.478027, -0.193165], 13);
 
-const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
+  // Add a tile layer to the map
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
-const marker = L.marker(51.478027, -0.193165]).addTo(map);
+  // Define the marker coordinates
+  var markerCoordinates = [51.478027, -0.193165];
+
+  // Create a marker with default icon and add it to the map
+  var marker = L.marker(markerCoordinates).addTo(map);
+
+  // Add a popup to the marker
+  marker.bindPopup('Location of readings').openPopup();
 </script>
+
 
 </body>
 </html>
