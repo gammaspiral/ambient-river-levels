@@ -44,22 +44,60 @@ crossorigin="">
     // Data
     const csvURL = "https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv";
 
-    // Create audio components
+ // Initialize audio components
     let synth;
     let reverb;
-      
-// Wait for a user gesture (e.g., button click) to create the AudioContext
-document.getElementById('startButton').addEventListener('click', () => {
-  // Create an AudioContext
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-  // Create audio components within the user gesture event
-  synth = new Tone.Synth().toDestination();
-  reverb = new Tone.Reverb({
-    decay: 5,
-    wet: 0.5,
-  }).connect(synth);
-});
+    // Create an AudioContext within a user gesture (e.g., button click)
+    document.getElementById('startButton').addEventListener('click', () => {
+      // Create an AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Initialize audio components within the user gesture event
+      synth = new Tone.Synth().toDestination();
+      reverb = new Tone.Reverb({
+        decay: 1,
+        wet: 1,
+      }).connect(synth);
+
+      // Start playing when the user clicks the "Start Music" button
+      startMusic();
+    });
+
+    // Start playing music
+    function startMusic() {
+      let index = 0;
+      const interval = 2000; // Simulated data update interval (2 seconds)
+
+      function playNextNote() {
+        // Use the data to control synth parameters (e.g., pitch and volume)
+        const dataValue = parseFloat(csvData[index]['Height (m)']);
+        const pitch = mapDataToPitch(dataValue);
+        const volume = dataValue;
+
+        // Play a note
+        synth.triggerAttackRelease(pitch, '8n', undefined, volume);
+
+        // Move to the next data point
+        index = (index + 1) % csvData.length;
+
+        // Schedule the next note
+        setTimeout(playNextNote, interval);
+      }
+
+      // Start playing
+      playNextNote();
+    }
+
+    // Stop button event
+    document.getElementById('stopButton').addEventListener('click', () => {
+      // Check if the synth object exists and is valid
+      if (synth) {
+        // Release all notes
+        synth.triggerRelease();
+      }
+    });
+
     let csvData = [];
     let minDataValue;
     let maxDataValue;
