@@ -30,7 +30,7 @@ function startMusic() {
 
   function playNextNote() {
     // Use the data to control synth parameters (e.g., pitch and volume)
-    const dataValue = parseFloat(csvData[index]['Height (m)']);
+    const heights = csvData.map((row) => parseFloat(row['Height (m)']));
     const pitch = mapDataToPitch(dataValue);
     const volume = dataValue;
 
