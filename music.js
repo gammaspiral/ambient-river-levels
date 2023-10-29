@@ -43,6 +43,13 @@ function startMusic(audioContext) {
   const interval = 2000; // Simulated data update interval (2 seconds);
   let lastScheduledTime = audioContext.currentTime;
 
+    // Create a FeedbackDelay instance with the desired settings
+  const delay = new Tone.FeedbackDelay({
+    delayTime: 0.2, // Adjust the delay time (in seconds) as needed
+    feedback: 0.7, // Adjust the feedback amount
+  });
+   // Connect the delay effect in the audio chain
+  synth.connect(delay);
   function playDroningTexture() {
     // Use the data to control synth parameters (e.g., pitch and volume)
     const dataValue = parseFloat(csvData[index]['Height (m)']);
