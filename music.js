@@ -39,18 +39,23 @@ function mapDataToPitch(dataValue) {
 }
 
 // Start playing music
+// Enhance the startMusic function to create evolving drones with volume and release adjustments
 function startMusic() {
   let index = 0;
   const interval = 2000; // Simulated data update interval (2 seconds)
 
   function playDroningTexture() {
-    // Use the data to control synth parameters (e.g., pitch and volume)
+    // Use the data to control synth parameters (e.g., pitch, volume, and release time)
     const dataValue = parseFloat(csvData[index]['Height (m)']);
     const pitch = mapDataToPitch(dataValue);
-    const volume = dataValue;
+    const volume = mapDataToVolume(dataValue);
+    const release = mapDataToRelease(dataValue);
 
     // Play a sustained note with the current parameters
     synth.triggerAttack(pitch, undefined, volume);
+
+    // Release the note after the specified release time
+    synth.triggerRelease(undefined, `+${release}`);
 
     // Move to the next data point
     index = (index + 1) % csvData.length;
@@ -62,6 +67,23 @@ function startMusic() {
   // Start playing the evolving drones
   playDroningTexture();
 }
+
+// Map "Height (m)" values to volume (adjust the mapping as needed)
+function mapDataToVolume(dataValue) {
+  // You can adjust this mapping to control volume based on the dataValue
+  // For example, you can make higher values quieter relative to lower values
+  // This is just a basic linear mapping, feel free to customize it
+  return 1 - (dataValue / maxDataValue);
+}
+
+// Map "Height (m)" values to release time (adjust the mapping as needed)
+function mapDataToRelease(dataValue) {
+  // You can adjust this mapping to control release time based on the dataValue
+  // For example, you can make higher values have longer release times
+  // This is just a basic linear mapping, feel free to customize it
+  return 0.1 + 0.4 * (dataValue / maxDataValue);
+}
+
 
 // Fetch CSV data from the URL
 fetch(csvURL)
