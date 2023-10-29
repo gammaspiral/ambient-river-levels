@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ambient River Levels/title>
+</head>
+<body>
+  <button id="startButton">Start Music in Westminster</button>
+  <button id="stopButton">Stop Music in Westminster</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/tone@14"></script>
+  <script>
+    // Initialize Tone.js
+    Tone.start();
+
+    // Create audio components
+    const synth = new Tone.Synth().toDestination();
+    const reverb = new Tone.Reverb({
+      decay: 5,
+      wet: 0.5,
+    }).connect(synth);
+
+    // Data simulation (replace this with real data retrieval from GitHub)
+    const simulatedData = [0.2, 0.5, 0.7, 0.4, 0.8, 0.3, 0.6];
+
+    // Start button event
+    document.getElementById('startButton').addEventListener('click', () => {
+      let index = 0;
+      const interval = 2000; // Simulated data update interval (2 seconds)
+
+      function playNextNote() {
+        // Use the data to control synth parameters (e.g., pitch and volume)
+        const dataValue = simulatedData[index];
+        const pitch = dataValue * 600 + 200; // Adjust the pitch range as needed
+        const volume = dataValue;
+
+        // Play a note
+        synth.triggerAttackRelease(pitch, '8n', undefined, volume);
+
+        // Move to the next data point
+        index = (index + 1) % simulatedData.length;
+
+        // Schedule the next note
+        setTimeout(playNextNote, interval);
+      }
+
+      // Start playing
+      playNextNote();
+    });
+
+    // Stop button event
+    document.getElementById('stopButton').addEventListener('click', () => {
+      // Stop the music
+      synth.releaseAll();
+    });
+  </script>
+</body>
+</html>
