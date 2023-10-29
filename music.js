@@ -9,9 +9,8 @@ let minDataValue;
 let maxDataValue;
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Your JavaScript code here
+  // Add event listener for the 'startButton'
   const startButton = document.getElementById('startButton');
-  // Add event listener to the button
   if (startButton) {
     startButton.addEventListener('click', () => {
       if (!synth) {
@@ -24,6 +23,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Start playing when the user clicks the "Start Music" button
         startMusic();
+      }
+    });
+  }
+
+  // Add event listener for the 'stopButton'
+  const stopButton = document.getElementById('stopButton');
+  if (stopButton) {
+    stopButton.addEventListener('click', () => {
+      // Check if the synth object exists and is valid
+      if (synth) {
+        // Release all notes
+        synth.triggerRelease();
+        synth.dispose(); // Dispose of the synth to disconnect it from the audio context
+        synth = undefined; // Set synth to undefined to allow reinitialization
       }
     });
   }
@@ -54,16 +67,7 @@ function startMusic() {
   playNextNote();
 }
 
-// Stop button event
-document.getElementById('stopButton').addEventListener('click', () => {
-  // Check if the synth object exists and is valid
-  if (synth) {
-    // Release all notes
-    synth.triggerRelease();
-    synth.dispose(); // Dispose of the synth to disconnect it from the audio context
-    synth = undefined; // Set synth to undefined to allow reinitialization
-  }
-});
+
 
 // Fetch CSV data from the URL
 fetch(csvURL)
