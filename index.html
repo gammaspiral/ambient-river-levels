@@ -43,18 +43,22 @@ crossorigin="">
     // Create audio components
     let synth;
     let reverb;
+      
+// Wait for a user gesture (e.g., button click) to create the AudioContext
+document.getElementById('startButton').addEventListener('click', () => {
+  // Create an AudioContext
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Wait for a user gesture (e.g., button click) to create the AudioContext
-    document.getElementById('startButton').addEventListener('click', () => {
-      // Create an AudioContext
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  // Create audio components within the user gesture event
+  synth = new Tone.Synth().toDestination();
+  reverb = new Tone.Reverb({
+    decay: 5,
+    wet: 0.5,
+  }).connect(synth);
 
-      // Create audio components within the user gesture event
-      synth = new Tone.Synth().toDestination();
-      reverb = new Tone.Reverb({
-        decay: 5,
-        wet: 0.5,
-      }).connect(synth);
+  // Continue with the rest of your code (fetching data, playing music, etc.)...
+});
+
 
     let csvData = [];
     let minDataValue;
