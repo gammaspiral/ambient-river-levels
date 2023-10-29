@@ -37,8 +37,7 @@ function mapDataToPitch(dataValue) {
   const normalizedValue = (dataValue - minDataValue) / (maxDataValue - minDataValue);
   return Math.round(minPitch + normalizedValue * pitchRange);
 }
-
-function startMusic() {
+function startMusic(audioContext) {
   let index = 0;
   const interval = 2000; // Simulated data update interval (2 seconds)
 
@@ -48,7 +47,6 @@ function startMusic() {
     const pitch = mapDataToPitch(dataValue);
     //const volume = mapDataToVolume(dataValue);
     const volume = 0.5;
-
     // Calculate the duration of the previous note (in milliseconds)
     const previousNoteDuration = synth.getEnvelopeAtTime(audioContext.currentTime).release;
 
@@ -56,7 +54,7 @@ function startMusic() {
     const delay = previousNoteDuration * 1000;
 
     // Schedule the next note with a delay
-    synth.triggerAttackRelease(pitch, '1n', 2.0, 4.5, volume, audioContext.currentTime + delay / 1000);
+    synth.triggerAttackRelease(pitch, '1n', 2.11, 4.5, volume, audioContext.currentTime + delay / 1000);
 
     // Move to the next data point
     index = (index + 1) % csvData.length;
@@ -68,6 +66,28 @@ function startMusic() {
   // Start playing the evolving drones
   playDroningTexture();
 }
+
+// Create an AudioContext within a user gesture (e.g., button click)
+document.getElementById('startButton').addEventListener('click', () => {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Initialize audio components within the user gesture event
+  synth = new Tone.Synth().toDestination();
+  reverb = new Tone.Reverb({
+    decay: 600,
+    wet: 1,
+  });
+
+  const reverbGain = new Tone.Gain().connect(reverb);
+  reverbGain.toDestination();
+
+  // Connect the synth to the reverb through the gain node
+  synth.connect(reverbGain);
+
+  // Start playing when the user clicks the "Start Music" button
+  startMusic(audioContext);
+});
+
 
 
 // Fetch CSV data from the URL
