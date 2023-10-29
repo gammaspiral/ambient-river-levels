@@ -12,12 +12,30 @@ let maxDataValue;
 
 // Function to parse CSV data
 function parseCSV(csv) {
-  // ... (rest of the code remains the same)
+  // Split the CSV into rows
+  const rows = csv.trim().split("\n");
+  const headers = rows[0].split(",");
+  const data = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i].split(",");
+    const entry = {};
+    for (let j = 0; j < headers.length; j++) {
+      entry[headers[j].trim()] = row[j].trim();
+    }
+    data.push(entry);
+  }
+
+  return data;
 }
 
 // Function to map data to musical pitch
 function mapDataToPitch(dataValue) {
-  // ... (rest of the code remains the same)
+  const minPitch = 36; // MIDI note number for C2
+  const maxPitch = 60; // MIDI note number for C5
+  const pitchRange = maxPitch - minPitch;
+  const normalizedValue = (dataValue - minDataValue) / (maxDataValue - minDataValue);
+  return Math.round(minPitch + normalizedValue * pitchRange);
 }
 
 // Start playing music
@@ -70,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize audio components within the user gesture event
     synth = new Tone.Synth().toDestination();
     reverb = new Tone.Reverb({
-      decay: 10,
+      decay: 1,
       wet: 1,
     });
 
