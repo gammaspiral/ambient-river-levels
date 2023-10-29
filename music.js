@@ -4,7 +4,7 @@
 const csvURL = "https://raw.githubusercontent.com/gammaspiral/ambient-river-levels/main/Westminster.csv";
 
 // Initialize audio components and variables
-let synth;
+let synth; // Declare synth here
 let reverb;
 let csvData = [];
 let minDataValue;
@@ -12,29 +12,12 @@ let maxDataValue;
 
 // Function to parse CSV data
 function parseCSV(csv) {
-  const rows = csv.trim().split("\n");
-  const headers = rows[0].split(",");
-  const data = [];
-
-  for (let i = 1; i < rows.length; i++) {
-    const row = rows[i].split(",");
-    const entry = {};
-    for (let j = 0; j < headers.length; j++) {
-      entry[headers[j].trim()] = row[j].trim();
-    }
-    data.push(entry);
-  }
-
-  return data;
+  // ... (rest of the code remains the same)
 }
 
 // Function to map data to musical pitch
 function mapDataToPitch(dataValue) {
-  const minPitch = 36; // MIDI note number for C2
-  const maxPitch = 60; // MIDI note number for C5
-  const pitchRange = maxPitch - minPitch;
-  const normalizedValue = (dataValue - minDataValue) / (maxDataValue - minDataValue);
-  return Math.round(minPitch + normalizedValue * pitchRange);
+  // ... (rest of the code remains the same)
 }
 
 // Start playing music
@@ -81,43 +64,34 @@ fetch(csvURL)
 // Create audio components and event listeners within the DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', function() {
   // Create an AudioContext within a user gesture (e.g., button click)
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  document.getElementById('startButton').addEventListener('click', () => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-  // Initialize audio components within the user gesture event
-  synth = new Tone.Synth().toDestination();
-  reverb = new Tone.Reverb({
-    decay: 1,
-    wet: 1,
+    // Initialize audio components within the user gesture event
+    synth = new Tone.Synth().toDestination();
+    reverb = new Tone.Reverb({
+      decay: 10,
+      wet: 1,
+    });
+
+    const reverbGain = new Tone.Gain().connect(reverb);
+    reverbGain.toDestination();
+
+    // Connect the synth to the reverb through the gain node
+    synth.connect(reverbGain);
+
+    // Start playing when the user clicks the "Start Music" button
+    startMusic();
   });
 
-  const reverbGain = new Tone.Gain().connect(reverb);
-  reverbGain.toDestination();
-  
-  // Connect the synth to the reverb through the gain node
-  synth.connect(reverbGain);
-
-  // Add event listener for the 'startButton'
-  const startButton = document.getElementById('startButton');
-  if (startButton) {
-    startButton.addEventListener('click', () => {
-      if (!synth) {
-        // Start playing music
-        startMusic();
-      }
-    });
-  }
-
   // Add event listener for the 'stopButton'
-  const stopButton = document.getElementById('stopButton');
-  if (stopButton) {
-    stopButton.addEventListener('click', () => {
-      // Check if the synth object exists and is valid
-      if (synth) {
-        // Release all notes
-        synth.triggerRelease();
-        synth.dispose(); // Dispose of the synth to disconnect it from the audio context
-        synth = undefined; // Set synth to undefined to allow reinitialization
-      }
-    });
-  }
+  document.getElementById('stopButton').addEventListener('click', () => {
+    // Check if the synth object exists and is valid
+    if (synth) {
+      // Release all notes
+      synth.triggerRelease();
+      synth.dispose(); // Dispose of the synth to disconnect it from the audio context
+      synth = undefined; // Set synth to undefined to allow reinitialization
+    }
+  });
 });
