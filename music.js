@@ -38,30 +38,37 @@ function mapDataToPitch(dataValue) {
   return Math.round(minPitch + normalizedValue * pitchRange);
 }
 
-// Start playing music
 function startMusic() {
   let index = 0;
-  const interval = 20000; // Simulated data update interval (2 seconds)
+  const interval = 2000; // Simulated data update interval (2 seconds)
 
-  function playNextNote() {
+  function playDroningTexture() {
     // Use the data to control synth parameters (e.g., pitch and volume)
     const dataValue = parseFloat(csvData[index]['Height (m)']);
     const pitch = mapDataToPitch(dataValue);
-    //const volume = dataValue;
-    const volume = 0.4;
-    // Play a note
-    synth.triggerAttackRelease(pitch, '1n', 2.0,4.0, volume);
+    //const volume = mapDataToVolume(dataValue);
+    const volume = 0.5;
+
+    // Calculate the duration of the previous note (in milliseconds)
+    const previousNoteDuration = synth.getEnvelopeAtTime(audioContext.currentTime).release;
+
+    // Calculate the delay for the next note (in milliseconds)
+    const delay = previousNoteDuration * 1000;
+
+    // Schedule the next note with a delay
+    synth.triggerAttackRelease(pitch, '1n', 2.0, 4.5, volume, audioContext.currentTime + delay / 1000);
 
     // Move to the next data point
     index = (index + 1) % csvData.length;
 
-    // Schedule the next note
-    setTimeout(playNextNote, interval);
+    // Schedule the next drone
+    setTimeout(playDroningTexture, interval);
   }
 
-  // Start playing
-  playNextNote();
+  // Start playing the evolving drones
+  playDroningTexture();
 }
+
 
 // Fetch CSV data from the URL
 fetch(csvURL)
