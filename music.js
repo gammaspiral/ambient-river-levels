@@ -70,7 +70,7 @@ fetch(csvURL)
     csvData = parseCSV(data);
 
     // Calculate min and max values dynamically from the CSV data
-    const heights = csvData.map((row) => parseFloat(row['Height (m)']));
+    const heights = csvData.map((row) => parseFloat(row['Height (m)'));
     minDataValue = Math.min(...heights);
     maxDataValue = Math.max(...heights);
   })
