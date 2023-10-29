@@ -40,14 +40,15 @@ function mapDataToPitch(dataValue) {
 
 function startMusic(audioContext) {
   let index = 0;
-  const interval = 2000; // Simulated data update interval (2 seconds)
+  const interval = 2000; // Simulated data update interval (2 seconds);
+  let lastScheduledTime = audioContext.currentTime;
 
   function playDroningTexture() {
     // Use the data to control synth parameters (e.g., pitch and volume)
     const dataValue = parseFloat(csvData[index]['Height (m)']);
     const pitch = mapDataToPitch(dataValue);
     const volume = 0.5;
-    const releaseTime = 5.5; // Adjust the release time as needed
+    const releaseTime = 1.5; // Adjust the release time as needed
 
     // Calculate the duration of the previous note (in milliseconds)
     const previousNoteDuration = releaseTime * 1000;
@@ -55,8 +56,14 @@ function startMusic(audioContext) {
     // Calculate the delay for the next note (in milliseconds)
     const delay = previousNoteDuration;
 
-    // Schedule the next note with a delay and specified release time
-    synth.triggerAttackRelease(pitch, '1n', audioContext.currentTime + delay / 1000, releaseTime, volume);
+    // Calculate the time for scheduling the next note
+    const nextScheduledTime = lastScheduledTime + (interval / 1000);
+
+    // Schedule the next note with the specified release time
+    synth.triggerAttackRelease(pitch, '1n', nextScheduledTime, releaseTime, volume);
+
+    // Update the last scheduled time
+    lastScheduledTime = nextScheduledTime;
 
     // Move to the next data point
     index = (index + 1) % csvData.length;
@@ -68,6 +75,7 @@ function startMusic(audioContext) {
   // Start playing the evolving drones
   playDroningTexture();
 }
+
 
 // Create an AudioContext within a user gesture (e.g., button click)
 document.getElementById('startButton').addEventListener('click', () => {
