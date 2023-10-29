@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
       synth = new Tone.Synth().toDestination();
       reverb = new Tone.Reverb({
         decay: 60,
-        wet: 1,
+       // wet: 1,
       });
 
       const reverbGain = new Tone.Gain().connect(reverb);
