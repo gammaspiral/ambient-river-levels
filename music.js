@@ -85,6 +85,7 @@ function mapDataToRelease(dataValue) {
 }
 
 
+
 // Fetch CSV data from the URL
 fetch(csvURL)
   .then((response) => response.text())
