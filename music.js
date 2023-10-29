@@ -71,7 +71,7 @@ fetch(csvURL)
     csvData = parseCSV(data);
 
     // Calculate min and max values dynamically from the CSV data
-    const heights = csvData.map((row) => parseFloat(row['Height (m)']));
+    const heights = csvData.map((row) => parseFloat(row['Height (m)'));
     minDataValue = Math.min(...heights);
     maxDataValue = Math.max(...heights);
   })
@@ -81,35 +81,42 @@ fetch(csvURL)
 
 // Create audio components and event listeners within the DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', function() {
-  // Create an AudioContext within a user gesture (e.g., button click)
-  document.getElementById('startButton').addEventListener('click', () => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  // Add event listener for the 'startButton'
+  const startButton = document.getElementById('startButton');
+  if (startButton) {
+    startButton.addEventListener('click', () => {
+      // Create an AudioContext within a user gesture (e.g., button click)
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Initialize audio components within the user gesture event
-    synth = new Tone.Synth().toDestination();
-    reverb = new Tone.Reverb({
-      decay: 1,
-      wet: 1,
+      // Initialize audio components within the user gesture event
+      synth = new Tone.Synth().toDestination();
+      reverb = new Tone.Reverb({
+        decay: 1,
+        wet: 1,
+      });
+
+      const reverbGain = new Tone.Gain().connect(reverb);
+      reverbGain.toDestination();
+
+      // Connect the synth to the reverb through the gain node
+      synth.connect(reverbGain);
+
+      // Start playing when the user clicks the "Start Music" button
+      startMusic();
     });
-
-    const reverbGain = new Tone.Gain().connect(reverb);
-    reverbGain.toDestination();
-
-    // Connect the synth to the reverb through the gain node
-    synth.connect(reverbGain);
-
-    // Start playing when the user clicks the "Start Music" button
-    startMusic();
-  });
+  }
 
   // Add event listener for the 'stopButton'
-  document.getElementById('stopButton').addEventListener('click', () => {
-    // Check if the synth object exists and is valid
-    if (synth) {
-      // Release all notes
-      synth.triggerRelease();
-      synth.dispose(); // Dispose of the synth to disconnect it from the audio context
-      synth = undefined; // Set synth to undefined to allow reinitialization
-    }
-  });
+  const stopButton = document.getElementById('stopButton');
+  if (stopButton) {
+    stopButton.addEventListener('click', () => {
+      // Check if the synth object exists and is valid
+      if (synth) {
+        // Release all notes
+        synth.triggerRelease();
+        synth.dispose(); // Dispose of the synth to disconnect it from the audio context
+        synth = undefined; // Set synth to undefined to allow reinitialization
+      }
+    });
+  }
 });
